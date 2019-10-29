@@ -10,14 +10,15 @@ import importStatementsPlugin from '@teleporthq/teleport-plugin-import-statement
 import headConfigPlugin from '@teleporthq/teleport-plugin-jsx-head-config'
 import prettierJS from '@teleporthq/teleport-postprocessor-prettier-js'
 
-import { Mapping } from '@teleporthq/teleport-types'
+import { Mapping, FileType } from '@teleporthq/teleport-types'
 
 import GatsbyProjectMapping from './gatsby-mapping.json'
 import GatsbyTemplate from './project-template'
 import { createCustomHTMLEntryFile } from './utils'
 
 const createGatsbyProjectGenerator = () => {
-  const reactComponentGenerator = createReactComponentGenerator(ReactStyleVariation.CSSModules)
+  const variation = ReactStyleVariation.StyledComponents
+  const reactComponentGenerator = createReactComponentGenerator(variation)
   reactComponentGenerator.addMapping(GatsbyProjectMapping as Mapping)
 
   const reactPagesGenerator = createReactComponentGenerator(ReactStyleVariation.CSSModules, {
@@ -54,6 +55,14 @@ const createGatsbyProjectGenerator = () => {
     static: {
       prefix: '',
       path: ['static'],
+    },
+    framework: {
+      config: {
+        fileName: 'gatsby-config',
+        fileType: FileType.JS,
+        configPath: [''],
+        styleVariation: variation,
+      },
     },
   })
 
