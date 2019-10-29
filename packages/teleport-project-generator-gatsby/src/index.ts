@@ -16,12 +16,17 @@ import GatsbyProjectMapping from './gatsby-mapping.json'
 import GatsbyTemplate from './project-template'
 import { createCustomHTMLEntryFile } from './utils'
 
-const createGatsbyProjectGenerator = () => {
-  const variation = ReactStyleVariation.StyledComponents
+interface GatsbyProjectConfig {
+  variation?: ReactStyleVariation
+}
+
+const createGatsbyProjectGenerator = (config: GatsbyProjectConfig = {}) => {
+  const variation = config.variation ? config.variation : ReactStyleVariation.CSSModules
+
   const reactComponentGenerator = createReactComponentGenerator(variation)
   reactComponentGenerator.addMapping(GatsbyProjectMapping as Mapping)
 
-  const reactPagesGenerator = createReactComponentGenerator(ReactStyleVariation.CSSModules, {
+  const reactPagesGenerator = createReactComponentGenerator(variation, {
     plugins: [headConfigPlugin],
     mappings: [GatsbyProjectMapping as Mapping],
   })
